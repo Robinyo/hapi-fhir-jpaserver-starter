@@ -32,7 +32,7 @@ http://localhost:8080
 You should see something like:
 
 <p align="center">
-  <img src="./welcome.png" alt="HAPI FHIR AU Starter Project" width="400"/>
+  <img src="./welcome.png" alt="Welcome page"/>
 </p>
 
 To stop the services:
