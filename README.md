@@ -2,7 +2,7 @@
   <img src="./logo.svg" alt="HAPI FHIR AU Starter Project" width="400"/>
 </p>
 
-<h1 align="center">HAPI FHIR AU Starter Project</h1>
+<h1 align="center">HAPI FHIR AU Starter Project.</h1>
 
 <p align="center">
   <b>A sample HAPI FHIR Starter Project</b> <br>
@@ -16,4 +16,9 @@
 * [Quick Start Guide](docs/quick-start-guide)
 
 ![divider](./divider.png)
+
+## ❯ Resources
+
+* Rob Ferguson's blog: [Getting Started with HAPI FHIR](https://rob-ferguson.me/getting-started-with-hapi-fhir/)
+
 
