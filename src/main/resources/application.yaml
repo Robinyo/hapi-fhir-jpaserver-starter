@@ -1,12 +1,15 @@
-#Uncomment the "servlet" and "context-path" lines below to make the fhir endpoint available at /example/path/fhir instead of the default value of /fhir
+# Uncomment the "servlet" and "context-path" lines below to make the fhir endpoint available at /example/path/fhir
+# instead of the default value of /fhir
 server:
   #  servlet:
   #    context-path: /example/path
   port: 8080
-#Adds the option to go to eg. http://localhost:8080/actuator/health for seeing the running configuration
-#see https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints
+
+# Adds the option to go to eg. http://localhost:8080/actuator/health for seeing the running configuration
+# See https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints
 management:
-  #The following configuration will enable the actuator endpoints at /actuator/health, /actuator/info, /actuator/prometheus, /actuator/metrics. For security purposes, only /actuator/health is enabled by default.
+  # The following configuration will enable the actuator endpoints at /actuator/health, /actuator/info,
+  # /actuator/prometheus, /actuator/metrics. For security purposes, only /actuator/health is enabled by default.
   endpoints:
     enabled-by-default: false
     web:
@@ -32,6 +35,7 @@ management:
     metrics:
       export:
         enabled: true
+
 spring:
   main:
     allow-circular-references: true
@@ -40,11 +44,10 @@ spring:
     baselineOnMigrate: true
     fail-on-missing-locations: false
   datasource:
-    #url: 'jdbc:h2:file:./target/database/h2'
-    url: jdbc:h2:mem:test_mem
-    username: sa
-    password: null
-    driverClassName: org.h2.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driverClassName: ${SPRING_DATASOURCE_DRIVERCLASSNAME}
     max-active: 15
 
     # database connection pool size
@@ -55,28 +58,23 @@ spring:
       hibernate.format_sql: false
       hibernate.show_sql: false
 
-      #Hibernate dialect is automatically detected except Postgres and H2.
-      #If using H2, then supply the value of ca.uhn.fhir.jpa.model.dialect.HapiFhirH2Dialect
-      #If using postgres, then supply the value of ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
-      hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirH2Dialect
-  #      hibernate.hbm2ddl.auto: update
-  #      hibernate.jdbc.batch_size: 20
-  #      hibernate.cache.use_query_cache: false
-  #      hibernate.cache.use_second_level_cache: false
-  #      hibernate.cache.use_structured_entries: false
-  #      hibernate.cache.use_minimal_puts: false
+      # Hibernate dialect is automatically detected except Postgres and H2.
+      # If using postgres, then supply the value of ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
+      # hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirH2Dialect
+      hibernate.dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT}
 
-  ###    These settings will enable fulltext search with lucene or elastic
+      # These settings will enable fulltext search with lucene or elastic
       hibernate.search.enabled: false
-  ### lucene parameters
+### lucene parameters
 #      hibernate.search.backend.type: lucene
 #      hibernate.search.backend.analysis.configurer: ca.uhn.fhir.jpa.search.HapiHSearchAnalysisConfigurers$HapiLuceneAnalysisConfigurer
 #      hibernate.search.backend.directory.type: local-filesystem
 #      hibernate.search.backend.directory.root: target/lucenefiles
 #      hibernate.search.backend.lucene_version: lucene_current
-  ### elastic parameters ===> see also elasticsearch section below <===
+### elastic parameters ===> see also elasticsearch section below <===
 #      hibernate.search.backend.type: elasticsearch
 #      hibernate.search.backend.analysis.configurer: ca.uhn.fhir.jpa.search.HapiHSearchAnalysisConfigurers$HapiElasticAnalysisConfigurer
+
 hapi:
   fhir:
     ### This flag when enabled to true, will avail evaluate measure operations from CR Module.
@@ -227,6 +225,7 @@ hapi:
       - https://unitsofmeasure.org/*
       - http://loinc.org/*
       - https://loinc.org/*
+      - http://hl7.org.au/*
     #    partitioning:
     #      allow_references_across_partitions: false
     #      partitioning_include_in_search_hashes: false
