@@ -2,10 +2,10 @@
   <img src="./logo.svg" alt="HAPI FHIR AU Starter Project" width="400"/>
 </p>
 
-<h1 align="center">HAPI FHIR AU Starter Project.</h1>
+<h1 align="center">HAPI FHIR AU Starter Project</h1>
 
 <p align="center">
-  <b>A sample HAPI FHIR Starter Project</b> <br>
+  <b>A sample HAPI FHIR Starter Project.</b> <br>
 </p>
 
 ![divider](./divider.png)
