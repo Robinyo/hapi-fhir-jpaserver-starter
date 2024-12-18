@@ -17,6 +17,14 @@ cd ~/workspace/hapi-fhir-jpaserver-starter
 
 ### Docker Compose
 
+#### Build
+
+```
+docker compose -f docker-compose-fhir-au.yml build
+```
+
+#### Run
+
 With a single command, you can create and start all the services:
 
 ```

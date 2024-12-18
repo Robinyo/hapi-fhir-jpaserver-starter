@@ -14,7 +14,8 @@ import java.net.MalformedURLException;
 @ConditionalOnProperty(prefix = "hapi.fhir", name = "custom_content_path")
 public class CustomContentFilesConfigurer implements WebMvcConfigurer {
 
-	public static final String CUSTOM_CONTENT = "/content";
+	public static final String CUSTOM_CONTENT = "/temp/public/custom/content";
+	// public static final String CUSTOM_CONTENT = "/content";
 	private String customContentPath;
 
 
@@ -24,7 +25,6 @@ public class CustomContentFilesConfigurer implements WebMvcConfigurer {
 			customContentPath = customContentPath.substring(0, customContentPath.lastIndexOf('/'));
 
 	}
-
 
 	@Override
 	public void addResourceHandlers(@NotNull ResourceHandlerRegistry theRegistry) {

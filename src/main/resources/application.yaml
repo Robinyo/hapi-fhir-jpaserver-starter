@@ -132,21 +132,21 @@ hapi:
     ### This is the FHIR version. Choose between, DSTU2, DSTU3, R4 or R5
     fhir_version: R4
     ### Flag is false by default. This flag enables runtime installation of IG's.
-    ig_runtime_upload_enabled: false
+    ig_runtime_upload_enabled: true
     ### This flag when enabled to true, will avail evaluate measure operations from CR Module.
 
     ### enable to use the ApacheProxyAddressStrategy which uses X-Forwarded-* headers
     ### to determine the FHIR server address
-    #   use_apache_address_strategy: false
+    use_apache_address_strategy: false
     ### forces the use of the https:// protocol for the returned server address.
     ### alternatively, it may be set using the X-Forwarded-Proto header.
-    #   use_apache_address_strategy_https: false
+    use_apache_address_strategy_https: false
     ### enables the server to overwrite defaults on HTML, css, etc. under the url pattern of eg. /content/custom **
     ### Folder with custom content MUST be named custom. If omitted then default content applies
-    #custom_content_path: ./custom
+    custom_content_path: ./custom
     ### enables the server host custom content. If e.g. the value ./configs/app is supplied then the content
     ### will be served under /web/app
-    #app_content_path: ./configs/app
+    # app_content_path: ./configs/app
     ### enable to set the Server URL
     #    server_address: http://hapi.fhir.org/baseR4
     #    defer_indexing_for_codesystems_of_size: 101
@@ -171,43 +171,43 @@ hapi:
     ##################################################
     # Allowed Bundle Types for persistence (defaults are: COLLECTION,DOCUMENT,MESSAGE)
     ##################################################
-    #    allowed_bundle_types: COLLECTION,DOCUMENT,MESSAGE,TRANSACTION,TRANSACTIONRESPONSE,BATCH,BATCHRESPONSE,HISTORY,SEARCHSET
-    #    allow_cascading_deletes: true
-    #    allow_contains_searches: true
-    #    allow_external_references: true
-    #    allow_multiple_delete: true
-    #    allow_override_default_search_params: true
-    #    auto_create_placeholder_reference_targets: false
+    allowed_bundle_types: COLLECTION,DOCUMENT,MESSAGE,TRANSACTION,TRANSACTIONRESPONSE,BATCH,BATCHRESPONSE,HISTORY,SEARCHSET
+    allow_cascading_deletes: true
+    allow_contains_searches: true
+    allow_external_references: true
+    allow_multiple_delete: true
+    allow_override_default_search_params: true
+    auto_create_placeholder_reference_targets: false
     #    mass_ingestion_mode_enabled: false
     ### tells the server to automatically append the current version of the target resource to references at these paths
     #    auto_version_reference_at_paths: Device.patient, Device.location, Device.parent, DeviceMetric.parent, DeviceMetric.source, Observation.device, Observation.subject
-    #    ips_enabled: false
-    #    default_encoding: JSON
-    #    default_pretty_print: true
-    #    default_page_size: 20
-    #    delete_expunge_enabled: true
-    #    enable_repository_validating_interceptor: true
+    ips_enabled: true
+    default_encoding: JSON
+    default_pretty_print: true
+    default_page_size: 20
+    delete_expunge_enabled: true
+    enable_repository_validating_interceptor: true
     #    enable_index_missing_fields: false
-    #    enable_index_of_type: true
+    enable_index_of_type: true
     #    enable_index_contained_resource: false
     #    upliftedRefchains_enabled: true
     #    resource_dbhistory_enabled: false
     ###  !!Extended Lucene/Elasticsearch Indexing is still a experimental feature, expect some features (e.g. _total=accurate) to not work as expected!!
     ###  more information here: https://hapifhir.io/hapi-fhir/docs/server_jpa/elastic.html
     advanced_lucene_indexing: false
-    bulk_export_enabled: false
-    bulk_import_enabled: false
-    #    language_search_parameter_enabled: true
+    bulk_export_enabled: true
+    bulk_import_enabled: true
+    language_search_parameter_enabled: true
     #    enforce_referential_integrity_on_delete: false
     # This is an experimental feature, and does not fully support _total and other FHIR features.
     #    enforce_referential_integrity_on_delete: false
     #    enforce_referential_integrity_on_write: false
     #    etag_support_enabled: true
-    #    expunge_enabled: true
+    expunge_enabled: true
     #    client_id_strategy: ALPHANUMERIC
     #    server_id_strategy: SEQUENTIAL_NUMERIC
     #    fhirpath_interceptor_enabled: false
-    #    filter_search_enabled: true
+    filter_search_enabled: true
     #    graphql_enabled: true
     narrative_enabled: false
     mdm_enabled: false
@@ -282,6 +282,8 @@ hapi:
     #    max_page_size: 200
     #    retain_cached_searches_mins: 60
     #    reuse_cached_search_results_millis: 60000
+    retain_cached_searches_mins: -1
+    reuse_cached_search_results_millis: -1
     tester:
       home:
         name: Local Tester
@@ -298,7 +300,6 @@ hapi:
     #      responses_enabled: true
     #    binary_storage_enabled: true
     inline_resource_storage_below_size: 4000
-#    bulk_export_enabled: true
 #    subscription:
 #      resthook_enabled: true
 #      websocket_enabled: false
