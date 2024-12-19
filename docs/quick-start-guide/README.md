@@ -19,6 +19,8 @@ cd ~/workspace/hapi-fhir-jpaserver-starter
 
 #### Build
 
+To build the project:
+
 ```
 docker compose -f docker-compose-fhir-au.yml build
 ```
