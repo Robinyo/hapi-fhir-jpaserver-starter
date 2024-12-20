@@ -168,3 +168,8 @@ Temporary Items
 
 # Helm Chart dependencies
 **/charts/*.tgz
+
+temp/
+
+TODO.txt
+
