@@ -51,12 +51,6 @@ To stop the services:
 docker compose -f docker-compose-fhir-au.yml stop
 ```
 
-To restart the services:
-
-```
-docker compose -f docker-compose-fhir-au.yml up
-```
-
 To remove the services:
 
 ```
@@ -67,5 +61,11 @@ To remove the data volume:
 
 ```
 docker volume rm hapi-fhir-jpaserver-starter_postgres_data
+```
+
+To restart the services:
+
+```
+docker compose -f docker-compose-fhir-au.yml up
 ```
 
