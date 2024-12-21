@@ -35,4 +35,5 @@ volumes:
 
 configs:
   hapi:
-    file: ./hapi.application.yaml
+    # file: ./hapi.application.yaml
+    file: ./hapi.application-fhir-au.yaml
