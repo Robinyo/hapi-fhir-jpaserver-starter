@@ -169,6 +169,7 @@ Temporary Items
 # Helm Chart dependencies
 **/charts/*.tgz
 
+architecture/
 temp/
 
 TODO.txt
