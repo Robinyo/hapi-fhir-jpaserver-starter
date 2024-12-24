@@ -14,6 +14,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   hapi-fhir:
+    image: robferguson/hapi-fhir-au
     build: .
     container_name: hapi-fhir
     restart: on-failure

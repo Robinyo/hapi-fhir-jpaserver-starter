@@ -1,4 +1,5 @@
 #!/bin/sh
 
-docker build -f docker-compose-fhir-au.yml -t robferguson/hapi-fhir-au .
+docker compose -f docker-compose-fhir-au.yml build
+
 
