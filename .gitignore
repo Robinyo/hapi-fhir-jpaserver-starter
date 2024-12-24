@@ -170,6 +170,7 @@ Temporary Items
 **/charts/*.tgz
 
 architecture/
+reference-material/
 temp/
 
 TODO.txt
