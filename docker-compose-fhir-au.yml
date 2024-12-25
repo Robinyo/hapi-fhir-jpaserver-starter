@@ -1,7 +1,7 @@
 services:
 
   postgres:
-    image: postgres:latest
+    image: postgres:17.2
     container_name: postgres
     restart: always
     environment:
@@ -14,7 +14,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   hapi-fhir:
-    image: robferguson/hapi-fhir-au
+    image: robferguson/hapi-fhir-au:7.6.0
     build: .
     container_name: hapi-fhir
     restart: on-failure
