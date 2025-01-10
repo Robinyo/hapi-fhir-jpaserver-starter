@@ -37,7 +37,12 @@ COPY --from=build-hapi --chown=1001:1001 /tmp/hapi-fhir-jpaserver-starter/opente
 ENV ALLOW_EMPTY_PASSWORD=yes
 
 ########### distroless brings focus on security and runs on plain spring boot - this is the default image
-FROM gcr.io/distroless/java17-debian12:nonroot AS default
+# FROM gcr.io/distroless/java17-debian12:nonroot AS default
+
+# Distroless images are minimal and lack shell access. The :debug image set for each language provides a busybox shell to enter.
+# See: https://github.com/GoogleContainerTools/distroless/blob/main/README.md
+FROM gcr.io/distroless/java17-debian12:debug-nonroot AS default
+
 # 65532 is the nonroot user's uid
 # used here instead of the name to allow Kubernetes to easily detect that the container
 # is running as a non-root (uid != 0) user.
