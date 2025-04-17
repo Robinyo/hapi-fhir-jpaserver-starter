@@ -12,7 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   hapi-fhir:
-    image: robferguson/hapi-fhir-au:7.6.0
+    image: robferguson/hapi-fhir-au:8.0.0
     build: .
     container_name: hapi-fhir
     restart: unless-stopped
@@ -34,5 +34,5 @@ volumes:
 
 configs:
   hapi:
-    # file: ./hapi.application.yaml
-    file: ./hapi.application-fhir-au-core-1.0.0-preview.yaml
+    file: ./hapi.application.yaml
+    # file: ./hapi.application-fhir-au-core-1.0.0-preview.yaml
