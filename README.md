@@ -5,7 +5,7 @@
 <h1 align="center">HAPI FHIR AU Starter Project</h1>
 
 <p align="center">
-  <b>A sample HAPI FHIR Starter Project.</b> <br>
+  <b>A sample HAPI FHIR Starter Project.</b> <br> <br>
   <b>This fork is configured to sync with the upstream repository.</b> <br>
 </p>
 
