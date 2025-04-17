@@ -6,6 +6,7 @@
 
 <p align="center">
   <b>A sample HAPI FHIR Starter Project.</b> <br>
+  <b>This fork is configured to sync with the upstream repository.</b> <br>
 </p>
 
 ![divider](./divider.png)
