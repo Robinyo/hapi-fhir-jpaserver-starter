@@ -5,25 +5,18 @@ services:
     container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: hapi
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   hapi-fhir:
-    image: robferguson/hapi-fhir-au:8.0.0
-    build: .
+    image: hapiproject/hapi:v8.0.0-2
     container_name: hapi-fhir
     restart: unless-stopped
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hapi
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: secret
-      SPRING_DATASOURCE_DRIVERCLASSNAME: 'org.postgresql.Driver'
-      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: 'ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect'
     ports:
-      - 80:80
+      - 8080:8080
     configs:
       - source: hapi
         target: /app/config/application.yaml
