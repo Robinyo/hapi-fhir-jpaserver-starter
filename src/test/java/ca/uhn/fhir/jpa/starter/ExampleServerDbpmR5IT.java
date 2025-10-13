@@ -29,11 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {Application.class}, properties =
 	{
 		"spring.datasource.url=jdbc:h2:mem:dbr5_dbpm",
+		"spring.jpa.properties.hibernate.search.backend.directory.type=local-heap",
 		"hapi.fhir.fhir_version=r5",
 		"hapi.fhir.partitioning.database_partition_mode_enabled=true",
 		"hapi.fhir.partitioning.patient_id_partitioning_mode=true"
 	})
-public class ExampleServerDbpmR5IT {
+class ExampleServerDbpmR5IT {
 
 	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(ExampleServerDstu2IT.class);
 	private IGenericClient ourClient;

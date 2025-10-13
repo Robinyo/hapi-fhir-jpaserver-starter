@@ -22,7 +22,7 @@ import org.opencds.cqf.fhir.cr.hapi.common.ElmCacheResourceChangeListener;
 import org.opencds.cqf.fhir.cr.measure.CareGapsProperties;
 import org.opencds.cqf.fhir.cr.measure.MeasureEvaluationOptions;
 import org.opencds.cqf.fhir.utility.ValidationProfile;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.opencds.cqf.fhir.utility.client.TerminologyServerClientSettings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -42,24 +42,24 @@ import java.util.concurrent.Executors;
 public class CrCommonConfig {
 
 	@Bean
-	@ConfigurationProperties(prefix = "hapi.fhir.cr")
-	CrProperties crProperties() {
-		return new CrProperties();
+	RetrieveSettings retrieveSettings(CqlData cqlData) {
+		return cqlData.getRetrieveSettings();
 	}
 
 	@Bean
-	RetrieveSettings retrieveSettings(CrProperties theCrProperties) {
-		return theCrProperties.getCql().getData();
+	TerminologySettings terminologySettings(CqlTerminologyProperties theCqlTerminologyProperties) {
+		return theCqlTerminologyProperties.getTerminologySettings();
 	}
 
 	@Bean
-	TerminologySettings terminologySettings(CrProperties theCrProperties) {
-		return theCrProperties.getCql().getTerminology();
+	TerminologyServerClientSettings terminologyServerClientSettings(CrProperties theCrProperties) {
+		return theCrProperties.getTerminologyServerClientSettings();
 	}
 
 	@Bean
 	public EvaluationSettings evaluationSettings(
-			CrProperties theCrProperties,
+			CqlRuntimeProperties cqlRuntimeProperties,
+			CqlCompilerProperties cqlCompilerProperties,
 			RetrieveSettings theRetrieveSettings,
 			TerminologySettings theTerminologySettings,
 			Map<VersionedIdentifier, CompiledLibrary> theGlobalLibraryCache,
@@ -70,7 +70,7 @@ public class CrCommonConfig {
 
 		var cqlEngineOptions = cqlOptions.getCqlEngineOptions();
 		Set<CqlEngine.Options> options = EnumSet.noneOf(CqlEngine.Options.class);
-		var cqlRuntimeProperties = theCrProperties.getCql().getRuntime();
+
 		if (cqlRuntimeProperties.isEnableExpressionCaching()) {
 			options.add(CqlEngine.Options.EnableExpressionCaching);
 		}
@@ -84,8 +84,6 @@ public class CrCommonConfig {
 		cqlOptions.setCqlEngineOptions(cqlEngineOptions);
 
 		var cqlCompilerOptions = new CqlCompilerOptions();
-
-		var cqlCompilerProperties = theCrProperties.getCql().getCompiler();
 
 		if (cqlCompilerProperties.isEnableDateRangeOptimization()) {
 			cqlCompilerOptions.setOptions(CqlCompilerOptions.Options.EnableDateRangeOptimization);
@@ -153,8 +151,8 @@ public class CrCommonConfig {
 		return executor;
 	}
 
-	@Bean
-	CareGapsProperties careGapsProperties(CrProperties theCrProperties) {
+	@Bean(name = "measure.CareGapsProperties")
+	org.opencds.cqf.fhir.cr.measure.CareGapsProperties careGapsProperties(CrProperties theCrProperties) {
 		var careGapsProperties = new CareGapsProperties();
 		// This check for the resource type really should be happening down in CR where the setting is actually used but
 		// that will have to wait for a future CR release

@@ -1,6 +1,8 @@
 package ca.uhn.fhir.jpa.starter;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.jpa.config.HibernatePropertiesProvider;
+import ca.uhn.fhir.jpa.model.dialect.HapiFhirH2Dialect;
 import ca.uhn.fhir.jpa.searchparam.config.NicknameServiceConfig;
 import ca.uhn.fhir.jpa.starter.cr.CrProperties;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -16,7 +18,6 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IIdType;
 import org.hl7.fhir.r4.model.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +42,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opencds.cqf.fhir.utility.r4.Parameters.parameters;
 import static org.opencds.cqf.fhir.utility.r4.Parameters.stringPart;
@@ -53,6 +54,7 @@ import static org.opencds.cqf.fhir.utility.r4.Parameters.stringPart;
 		RepositoryConfig.class
 	}, properties = {
 	"spring.datasource.url=jdbc:h2:mem:dbr4",
+	"spring.ai.mcp.server.enabled=false",
 	"hapi.fhir.enable_repository_validating_interceptor=true",
 	"hapi.fhir.fhir_version=r4",
 	"hapi.fhir.subscription.websocket_enabled=true",
@@ -69,6 +71,9 @@ import static org.opencds.cqf.fhir.utility.r4.Parameters.stringPart;
 	// beans are ambiguous as they are constructed multiple places. This is evident
 	// when running in a spring boot environment
 	"spring.main.allow-bean-definition-overriding=true",
+	"management.health.elasticsearch.enabled=false",
+	"spring.jpa.properties.hibernate.search.backend.directory.type=local-heap",
+	"management.endpoints.web.exposure.include=*",
 	"hapi.fhir.remote_terminology_service.snomed.system=http://snomed.info/sct",
 	"hapi.fhir.remote_terminology_service.snomed.url=https://tx.fhir.org/r4"
 })
@@ -80,6 +85,9 @@ class ExampleServerR4IT implements IServerSupport {
 	@Autowired
 	private CrProperties crProperties;
 
+	@Autowired
+	private HibernatePropertiesProvider myHibernatePropertiesProvider;
+
 	@LocalServerPort
 	private int port;
 
@@ -87,7 +95,7 @@ class ExampleServerR4IT implements IServerSupport {
 	@Order(0)
 	void testCreateAndRead() {
 		String methodName = "testCreateAndRead";
-		ourLog.info("Entering " + methodName + "()...");
+		ourLog.info("Entering {}()...", methodName);
 
 		Patient pt = new Patient();
 		pt.setActive(true);
@@ -127,7 +135,7 @@ class ExampleServerR4IT implements IServerSupport {
 		List<Parameters.ParametersParameterComponent> response = outParams.getParameter();
 		assertFalse(response.isEmpty());
 		Parameters.ParametersParameterComponent component = response.get(0);
-		assertTrue(component.getResource() instanceof MeasureReport);
+		assertInstanceOf(MeasureReport.class, component.getResource());
 		MeasureReport report = (MeasureReport) component.getResource();
 		assertEquals(measureUrl + "|0.0.003", report.getMeasure());
 	}
@@ -145,66 +153,57 @@ class ExampleServerR4IT implements IServerSupport {
 	void testSimpleDateCqlExecutionProvider() {
 		Parameters params = parameters(stringPart("expression", "Interval[Today() - 2 years, Today())"));
 		Parameters results = runCqlExecution(params);
-		assertTrue(results.getParameter("return").getValue() instanceof Period);
-	}
-
-	private IBaseResource loadRec(String theLocation, FhirContext theCtx, IGenericClient theClient) throws IOException {
-		String json = stringFromResource(theLocation);
-		List<IBaseResource> resList = new ArrayList<>();
-		IBaseResource resource = (IBaseResource) theCtx.newJsonParser().parseResource(json);
-		resList.add(resource);
-		var result = theClient.transaction().withResources(resList).execute();
-		//.withResources(resource).execute();
-		return result.get(0);
+		assertInstanceOf(Period.class, results.getParameter("return").getValue());
 	}
 
 	@Test
 	void testBatchPutWithIdenticalTags() {
-		String batchPuts = "{\n" +
-								 "\t\"resourceType\": \"Bundle\",\n" +
-								 "\t\"id\": \"patients\",\n" +
-								 "\t\"type\": \"batch\",\n" +
-								 "\t\"entry\": [\n" +
-								 "\t\t{\n" +
-								 "\t\t\t\"request\": {\n" +
-								 "\t\t\t\t\"method\": \"PUT\",\n" +
-								 "\t\t\t\t\"url\": \"Patient/pat-1\"\n" +
-								 "\t\t\t},\n" +
-								 "\t\t\t\"resource\": {\n" +
-								 "\t\t\t\t\"resourceType\": \"Patient\",\n" +
-								 "\t\t\t\t\"id\": \"pat-1\",\n" +
-								 "\t\t\t\t\"meta\": {\n" +
-								 "\t\t\t\t\t\"tag\": [\n" +
-								 "\t\t\t\t\t\t{\n" +
-								 "\t\t\t\t\t\t\t\"system\": \"http://mysystem.org\",\n" +
-								 "\t\t\t\t\t\t\t\"code\": \"value2\"\n" +
-								 "\t\t\t\t\t\t}\n" +
-								 "\t\t\t\t\t]\n" +
-								 "\t\t\t\t}\n" +
-								 "\t\t\t},\n" +
-								 "\t\t\t\"fullUrl\": \"/Patient/pat-1\"\n" +
-								 "\t\t},\n" +
-								 "\t\t{\n" +
-								 "\t\t\t\"request\": {\n" +
-								 "\t\t\t\t\"method\": \"PUT\",\n" +
-								 "\t\t\t\t\"url\": \"Patient/pat-2\"\n" +
-								 "\t\t\t},\n" +
-								 "\t\t\t\"resource\": {\n" +
-								 "\t\t\t\t\"resourceType\": \"Patient\",\n" +
-								 "\t\t\t\t\"id\": \"pat-2\",\n" +
-								 "\t\t\t\t\"meta\": {\n" +
-								 "\t\t\t\t\t\"tag\": [\n" +
-								 "\t\t\t\t\t\t{\n" +
-								 "\t\t\t\t\t\t\t\"system\": \"http://mysystem.org\",\n" +
-								 "\t\t\t\t\t\t\t\"code\": \"value2\"\n" +
-								 "\t\t\t\t\t\t}\n" +
-								 "\t\t\t\t\t]\n" +
-								 "\t\t\t\t}\n" +
-								 "\t\t\t},\n" +
-								 "\t\t\t\"fullUrl\": \"/Patient/pat-2\"\n" +
-								 "\t\t}\n" +
-								 "\t]\n" +
-								 "}";
+		String batchPuts = """
+			{
+			\t"resourceType": "Bundle",
+			\t"id": "patients",
+			\t"type": "batch",
+			\t"entry": [
+			\t\t{
+			\t\t\t"request": {
+			\t\t\t\t"method": "PUT",
+			\t\t\t\t"url": "Patient/pat-1"
+			\t\t\t},
+			\t\t\t"resource": {
+			\t\t\t\t"resourceType": "Patient",
+			\t\t\t\t"id": "pat-1",
+			\t\t\t\t"meta": {
+			\t\t\t\t\t"tag": [
+			\t\t\t\t\t\t{
+			\t\t\t\t\t\t\t"system": "http://mysystem.org",
+			\t\t\t\t\t\t\t"code": "value2"
+			\t\t\t\t\t\t}
+			\t\t\t\t\t]
+			\t\t\t\t}
+			\t\t\t},
+			\t\t\t"fullUrl": "/Patient/pat-1"
+			\t\t},
+			\t\t{
+			\t\t\t"request": {
+			\t\t\t\t"method": "PUT",
+			\t\t\t\t"url": "Patient/pat-2"
+			\t\t\t},
+			\t\t\t"resource": {
+			\t\t\t\t"resourceType": "Patient",
+			\t\t\t\t"id": "pat-2",
+			\t\t\t\t"meta": {
+			\t\t\t\t\t"tag": [
+			\t\t\t\t\t\t{
+			\t\t\t\t\t\t\t"system": "http://mysystem.org",
+			\t\t\t\t\t\t\t"code": "value2"
+			\t\t\t\t\t\t}
+			\t\t\t\t\t]
+			\t\t\t\t}
+			\t\t\t},
+			\t\t\t"fullUrl": "/Patient/pat-2"
+			\t\t}
+			\t]
+			}""";
 		Bundle bundle = FhirContext.forR4().newJsonParser().parseResource(Bundle.class, batchPuts);
 		ourClient.transaction().withBundle(bundle).execute();
 	}
@@ -272,8 +271,8 @@ class ExampleServerR4IT implements IServerSupport {
 		var reporter = crProperties.getCareGaps().getReporter();
 		var author = crProperties.getCareGaps().getSection_author();
 
-		assertTrue(reporter.equals("Organization/alphora"));
-		assertTrue(author.equals("Organization/alphora-author"));
+		assertEquals("Organization/alphora", reporter);
+		assertEquals("Organization/alphora-author", author);
 
 		String periodStartValid = "2019-01-01";
 		String periodEndValid = "2019-12-31";
@@ -322,7 +321,7 @@ class ExampleServerR4IT implements IServerSupport {
 	@Test
 	void testDiffOperationIsRegistered() {
 		String methodName = "testDiff";
-		ourLog.info("Entering " + methodName + "()...");
+		ourLog.info("Entering {}()...", methodName);
 
 		Patient pt = new Patient();
 		pt.setActive(true);
@@ -365,6 +364,11 @@ class ExampleServerR4IT implements IServerSupport {
 		assertEquals("Myocardial infarction", ((StringType) remoteResult.getParameterValue("display")).getValue());
 
 		Parameters localResult = ourClient.operation().onType(CodeSystem.class).named("$validate-code").withParameter(Parameters.class, "url", new UrlType(testCodeSystem)).andParameter("coding", new Coding(testCodeSystem, "yes", null)).execute();
+	}
+
+	@Test
+	public void testHibernatePropertiesProvider_GetDialect() {
+		assertEquals(HapiFhirH2Dialect.class, myHibernatePropertiesProvider.getDialect().getClass());
 	}
 
 	@BeforeEach
