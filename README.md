@@ -20,7 +20,7 @@
 Home (Welcome) Page
 
 <p align="center">
-  <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/docs/screen-shots/welcome.png">
+  <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/docs/screen-shots/welcome.png">
 </p>
 
 ![divider](./divider.png)
