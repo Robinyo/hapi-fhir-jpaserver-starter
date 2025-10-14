@@ -71,7 +71,7 @@ http://localhost:8080
 You should see something like:
 
 <p align="center">
-  <img src="./welcome.png" alt="Welcome page"/>
+  <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/docs/screen-shots/welcome.png" alt="Welcome page"/>
 </p>
 
 And in the logs:
