@@ -17,7 +17,7 @@ cd ~/workspace/hapi-fhir-jpaserver-starter
 
 ## ❯ Development
 
-Remember to adjust your overlay configuration in the project's [application.yaml](https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/src/main/resources/application.yaml)
+Remember to adjust the Web Testpage Overlay configuration in the project's [application.yaml](https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/src/main/resources/application.yaml)
 
 For example:
 
