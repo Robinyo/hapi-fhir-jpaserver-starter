@@ -43,9 +43,7 @@ mvn clean install
 mvn clean install -DskipTests=true
 ```
 
-### Docker Compose
-
-To build the project:
+To build the Docker Image:
 
 ```
 docker system prune && \
@@ -53,8 +51,6 @@ docker container prune && docker volume prune && docker network prune
 
 docker compose -f docker-compose-fhir-au.yml build
 ```
-
-#### Run
 
 With a single command, you can create and start all the services:
 
