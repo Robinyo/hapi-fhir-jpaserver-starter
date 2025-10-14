@@ -1,11 +1,11 @@
 services:
 
   hapi-fhir:
-    image: hapiproject/hapi:v8.4.0-2
+    # image: hapiproject/hapi:v8.4.0-2
     # image: hapiproject/hapi:v8.2.0-2
-    # image: robferguson/hapi-fhir-au:v8.4.0-2
+    image: robferguson/hapi-fhir-au:v8.4.0-2
     container_name: hapi-fhir
-    # build: .
+    build: .
     restart: unless-stopped
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${HAPI_FHIR_DB}

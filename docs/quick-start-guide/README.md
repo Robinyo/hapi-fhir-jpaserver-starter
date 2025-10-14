@@ -15,9 +15,35 @@ git clone git@github.com:Robinyo/hapi-fhir-jpaserver-starter.git
 cd ~/workspace/hapi-fhir-jpaserver-starter
 ``` 
 
-### Docker Compose
+## ❯ Development
 
-#### Build
+Remember to adjust your overlay configuration in the project's [application.yaml](https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/src/main/resources/application.yaml).
+
+For example:
+
+```
+
+...
+
+    tester:
+      home:
+        name: Local Tester
+        server_address: 'http://localhost:8080/fhir'
+        refuse_to_fetch_third_party_urls: false
+        fhir_version: R4
+```
+
+To build HAPI FHIR:
+
+```
+mvn clean install
+
+# or
+
+mvn clean install -DskipTests=true
+```
+
+### Docker Compose
 
 To build the project:
 
@@ -51,6 +77,7 @@ You should see something like:
 And in the logs:
 
 ```
+
 ...
 
 hapi-fhir  | 2025-10-14T21:16:02.328Z  INFO 1 --- [           main] ca.uhn.fhir.jpa.starter.Application      : Started Application in 27.688 seconds (process running for 28.332)
