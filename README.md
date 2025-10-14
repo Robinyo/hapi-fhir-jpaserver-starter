@@ -15,12 +15,23 @@
 ## ❯ Quick Start
 
 * [Quick Start Guide](docs/quick-start-guide)
+
 ## ❯ Screen Shots
 
 Home (Welcome) Page
 
 <p align="center">
   <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/docs/screen-shots/welcome.png">
+</p>
+
+## ❯ Web Testpage Overlay
+
+You can customise the Web Testpage Overlay by modifying the templates in the `src/main/webapp/WEB-INF/templates` directory.
+
+For example:
+
+<p align="center">
+  <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/docs/screen-shots/web-testpage-overlay.png">
 </p>
 
 ![divider](./divider.png)
