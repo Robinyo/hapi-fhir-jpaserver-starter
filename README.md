@@ -15,6 +15,13 @@
 ## ❯ Quick Start
 
 * [Quick Start Guide](docs/quick-start-guide)
+## ❯ Screen Shots
+
+Home (Welcome) Page
+
+<p align="center">
+  <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/docs/screen-shots/welcome.png">
+</p>
 
 ![divider](./divider.png)
 

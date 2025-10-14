@@ -107,7 +107,7 @@ spring:
         format_sql: false
         show_sql: false
         # Hibernate dialect is auto-detected except for H2/Postgres.
-        # If using H2:     ca.uhn.fhir.jpa.model.dialect.HapiFhirH2Dialect
+        # If using H2:     ca.uhn.fhir.jpa.model.spring.ai.mcp.server.enabled.HapiFhirH2Dialect
         # If using Postgres: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
         dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirH2Dialect
 

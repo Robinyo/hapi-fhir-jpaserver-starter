@@ -1,20 +1,11 @@
 services:
 
-  postgres:
-    image: postgres:17.5-alpine
-    container_name: postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: ${HAPI_FHIR_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   hapi-fhir:
-    image: robferguson/hapi-fhir-au:v8.4.0
+    image: hapiproject/hapi:v8.4.0-2
+    # image: hapiproject/hapi:v8.2.0-2
+    # image: robferguson/hapi-fhir-au:v8.4.0-2
     container_name: hapi-fhir
-    build: .
+    # build: .
     restart: unless-stopped
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${HAPI_FHIR_DB}
@@ -22,7 +13,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
-      SPRING_JPA_PROPERTIES_SEARCH_ENABLED: false
+      SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_ENABLED: false
     env_file:
       - ./.env
     ports:
@@ -30,6 +21,28 @@ services:
     configs:
       - source: hapi
         target: /app/config/application.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:17.5-alpine
+    container_name: postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${HAPI_FHIR_DB} -U $${POSTGRES_USER}"]
+      start_period: 10s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    environment:
+      POSTGRES_DB: ${HAPI_FHIR_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   postgres_data:
