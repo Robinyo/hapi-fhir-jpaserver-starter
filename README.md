@@ -2,11 +2,11 @@
   <img src="./logo.svg" alt="HAPI FHIR AU Starter Project" width="400"/>
 </p>
 
-<h1 align="center">HAPI FHIR AU Starter Project</h1>
+<h1 align="center">HAPI FHIR JPA Server Starter Project</h1>
 
 <p align="center">
-  <b>A sample HAPI FHIR Starter Project.</b> <br> <br>
-  <b>This fork is configured to sync with the upstream repository.</b> <br>
+  <b>A fork of the HAPI FHIR JPA Server Starter Project.</b> <br> <br>
+  <b>The fork is configured to sync with the upstream repository.</b> <br>
 </p>
 
 ![divider](./divider.png)
