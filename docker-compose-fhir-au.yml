@@ -2,7 +2,7 @@ services:
 
   hapi-fhir:
     # image: hapiproject/hapi:v8.4.0-2
-    image: robferguson/hapi-fhir-au:v8.4.0-2
+    image: robferguson/hapi-fhir-au:8.4.0-3
     container_name: hapi-fhir
     build: .
     restart: unless-stopped

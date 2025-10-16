@@ -17,22 +17,6 @@ cd ~/workspace/hapi-fhir-jpaserver-starter
 
 ## ❯ Development
 
-Remember to adjust the Web Testpage Overlay configuration in the project's [application.yaml](https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/src/main/resources/application.yaml)
-
-For example:
-
-```
-
-    ...
-
-    tester:
-      home:
-        name: Local Tester
-        server_address: 'http://localhost:8080/fhir'
-        refuse_to_fetch_third_party_urls: false
-        fhir_version: R4
-```
-
 To build HAPI FHIR:
 
 ```
