@@ -62,28 +62,57 @@ For example:
 
 ## ❯ MCP Server
 
-A FHIR Implementation Guide can be used to seed a FHIR data store:
-
-```
-hapi:
-  fhir:
-    default_encoding: json
-    implementationguides:
-      au_core:
-        name: hl7.fhir.au.core
-        version: 1.0.0-preview
-        reloadExisting: false
-        installMode: STORE_AND_INSTALL
-        packageUrl: https://hl7.org.au/fhir/core/package.tgz
-        fetchDependencies: true
-    logical_urls:
-      - http://hl7.org.au/*
-```
+You can enable MCP capabilities by setting the `spring.ai.mcp.server.enabled` to `true`. 
 
 For example:
 
+```
+server:
+  max-http-request-header-size: 64KB
+spring:
+  ai:
+    mcp:
+      server:
+        enabled: true
+  main:
+    banner-mode: off
+hapi:
+  fhir:
+    fhir_version: R4
+    tester:
+      home:
+        name: Local Tester
+        server_address: 'http://localhost:8080/fhir'
+        refuse_to_fetch_third_party_urls: false
+        fhir_version: R4
+```
+
+### MCP Client
+
+Claude for Desktop is a popular MCP Client.
+
+We can configure Claude for Desktop to use HAPI FHIR's MCP server by updating its configuration file.
+
+For example:
+
+```
+"mcpServers": {
+  "hapi": {
+    "command": "npx",
+      "args": [
+        "mcp-remote@latest",
+        "http://localhost:8080/mcp/messages"
+    ]
+  }
+}
+```
+
+Restart Claude for Desktop and then click on the 'Search and tools' button.
+
+You should see something like:
+
 <p align="center">
-  <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/docs/screen-shots/resources-au-core-1.0.0-preview.png">
+  <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/docs/screen-shots/search-and-tools.png">
 </p>
 
 ![divider](./divider.png)
