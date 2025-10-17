@@ -41,14 +41,14 @@ A FHIR Implementation Guide can be used to seed a FHIR data store:
 ```
 hapi:
   fhir:
-    default_encoding: json
+    fhir_version: R4
     implementationguides:
       au_core:
         name: hl7.fhir.au.core
         version: 1.0.0-preview
         reloadExisting: false
         installMode: STORE_AND_INSTALL
-        packageUrl: https://hl7.org.au/fhir/core/package.tgz
+        packageUrl: https://hl7.org.au/fhir/core/1.0.0-preview/package.tgz
         fetchDependencies: true
     logical_urls:
       - http://hl7.org.au/*
@@ -59,6 +59,8 @@ For example:
 <p align="center">
   <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/docs/screen-shots/resources-au-core-1.0.0-preview.png">
 </p>
+
+See: [hapi.application-fhir-au-core-1.0.0-preview.yaml](https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/hapi.application-fhir-au-core-1.0.0-preview.yaml)
 
 ## ❯ MCP Server
 
@@ -86,6 +88,8 @@ hapi:
         refuse_to_fetch_third_party_urls: false
         fhir_version: R4
 ```
+
+See: [hapi.application.yaml](https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/hapi.application.yaml)
 
 ## ❯ MCP Client
 
