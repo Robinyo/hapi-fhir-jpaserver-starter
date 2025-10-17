@@ -60,6 +60,32 @@ For example:
   <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/docs/screen-shots/resources-au-core-1.0.0-preview.png">
 </p>
 
+## ❯ MCP Server
+
+A FHIR Implementation Guide can be used to seed a FHIR data store:
+
+```
+hapi:
+  fhir:
+    default_encoding: json
+    implementationguides:
+      au_core:
+        name: hl7.fhir.au.core
+        version: 1.0.0-preview
+        reloadExisting: false
+        installMode: STORE_AND_INSTALL
+        packageUrl: https://hl7.org.au/fhir/core/package.tgz
+        fetchDependencies: true
+    logical_urls:
+      - http://hl7.org.au/*
+```
+
+For example:
+
+<p align="center">
+  <img src="https://github.com/Robinyo/hapi-fhir-jpaserver-starter/blob/master/docs/screen-shots/resources-au-core-1.0.0-preview.png">
+</p>
+
 ![divider](./divider.png)
 
 ## ❯ Resources
