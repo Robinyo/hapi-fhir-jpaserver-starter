@@ -87,7 +87,7 @@ hapi:
         fhir_version: R4
 ```
 
-### MCP Client
+## ❯ MCP Client
 
 Claude for Desktop is a popular MCP Client.
 
