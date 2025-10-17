@@ -64,7 +64,7 @@ See: [hapi.application-fhir-au-core-1.0.0-preview.yaml](https://github.com/Robin
 
 ## ❯ MCP Server
 
-You can enable MCP capabilities by setting the `spring.ai.mcp.server.enabled` to `true`. 
+You can enable MCP capabilities by setting `spring.ai.mcp.server.enabled` to `true`. 
 
 For example:
 
