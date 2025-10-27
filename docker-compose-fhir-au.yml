@@ -6,6 +6,8 @@ services:
     container_name: hapi-fhir
     build: .
     restart: unless-stopped
+    ports:
+      - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${HAPI_FHIR_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
@@ -15,8 +17,6 @@ services:
       SPRING_JPA_PROPERTIES_HIBERNATE_SEARCH_ENABLED: false
     env_file:
       - ./.env
-    ports:
-      - "8080:8080"
     configs:
       - source: hapi
         target: /app/config/application.yaml
@@ -28,6 +28,8 @@ services:
     image: postgres:17.5-alpine
     container_name: postgres
     restart: unless-stopped
+    ports:
+      - "5432:5432"  # Expose a host port for Schemaspy
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${HAPI_FHIR_DB} -U $${POSTGRES_USER}"]
       start_period: 10s
@@ -42,6 +44,21 @@ services:
       - ./.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:9.9.0
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    volumes:
+      - '${PWD}/pgadmin_data:/var/lib/pgadmin'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:

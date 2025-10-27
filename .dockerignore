@@ -9,3 +9,6 @@ target/jacoco.exec
 target/*.original
 .idea
 .git
+
+/pgdata
+/pgadmin_data
