@@ -171,5 +171,8 @@ Temporary Items
 architecture/
 temp/
 
+/pgdata
+/pgadmin_data
+
 TODO.txt
 
