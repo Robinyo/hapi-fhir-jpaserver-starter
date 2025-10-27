@@ -4,7 +4,7 @@
 
 You can use [pgAdmin](https://www.pgadmin.org/) to manage PostrgeSQL.
 
-Navigate to the pgAdmin Login page: https://serendipity.localhost:5443
+Navigate to the pgAdmin Login page: http://localhost:5050
 
 <p align="center">
   <img src="./pgadmin-login.png" alt="Login to pgAdmin"/>
