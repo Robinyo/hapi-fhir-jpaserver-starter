@@ -1,4 +1,4 @@
-<h1 align="center">SchemaSpy</h1>
+<h1 align="center">Schemaspy</h1>
 
 ## ❯ Introduction
 
